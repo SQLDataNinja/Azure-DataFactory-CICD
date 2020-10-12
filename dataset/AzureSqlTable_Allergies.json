@@ -1,0 +1,44 @@
+{
+	"name": "AzureSqlTable_Allergies",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureSqlDatabase_App",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "START",
+				"type": "datetime2",
+				"scale": 7
+			},
+			{
+				"name": "STOP",
+				"type": "datetime2",
+				"scale": 7
+			},
+			{
+				"name": "PATIENT",
+				"type": "nvarchar"
+			},
+			{
+				"name": "ENCOUNTER",
+				"type": "nvarchar"
+			},
+			{
+				"name": "CODE",
+				"type": "nvarchar"
+			},
+			{
+				"name": "DESCRIPTION",
+				"type": "nvarchar"
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "allergies"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}
