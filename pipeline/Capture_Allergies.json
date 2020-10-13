@@ -55,6 +55,9 @@
 				]
 			}
 		],
+		"folder": {
+			"name": "Static Data Pipelines"
+		},
 		"annotations": [],
 		"lastPublishTime": "2020-10-08T08:14:35Z"
 	},

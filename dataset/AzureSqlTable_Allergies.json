@@ -5,6 +5,9 @@
 			"referenceName": "AzureSqlDatabase_App",
 			"type": "LinkedServiceReference"
 		},
+		"folder": {
+			"name": "Static Datasets"
+		},
 		"annotations": [],
 		"type": "AzureSqlTable",
 		"schema": [
