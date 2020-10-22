@@ -3,7 +3,17 @@
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "AzureSqlDatabase_Generic",
-			"type": "LinkedServiceReference"
+			"type": "LinkedServiceReference",
+			"parameters": {
+				"param_ls_database_server": {
+					"value": "@dataset().param_dbsvr",
+					"type": "Expression"
+				},
+				"param_ls_database": {
+					"value": "@dataset().param_db",
+					"type": "Expression"
+				}
+			}
 		},
 		"parameters": {
 			"param_schema": {
@@ -13,10 +23,18 @@
 			"param_table": {
 				"type": "string",
 				"defaultValue": "abc"
+			},
+			"param_db": {
+				"type": "string",
+				"defaultValue": "testdb"
+			},
+			"param_dbsvr": {
+				"type": "string",
+				"defaultValue": "testsvr"
 			}
 		},
 		"folder": {
-			"name": "Dynamic Pipelines"
+			"name": "Dynamic Datasets"
 		},
 		"annotations": [],
 		"type": "AzureSqlTable",
