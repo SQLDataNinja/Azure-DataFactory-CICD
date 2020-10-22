@@ -1,0 +1,35 @@
+{
+	"name": "AzureSqlDBTable",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureSqlDatabase_Generic",
+			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"param_schema": {
+				"type": "string",
+				"defaultValue": "dbo"
+			},
+			"param_table": {
+				"type": "string",
+				"defaultValue": "abc"
+			}
+		},
+		"folder": {
+			"name": "Dynamic Pipelines"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [],
+		"typeProperties": {
+			"schema": {
+				"value": "@dataset().param_schema",
+				"type": "Expression"
+			},
+			"table": {
+				"value": "@dataset().param_table",
+				"type": "Expression"
+			}
+		}
+	}
+}
