@@ -128,7 +128,12 @@
 									"partitionOption": "None"
 								},
 								"sink": {
-									"type": "AzureSqlSink"
+									"type": "AzureSqlSink",
+									"preCopyScript": {
+										"value": "TRUNCATE TABLE @{item().tgt_schema}.@{item().tgt_table};",
+										"type": "Expression"
+									},
+									"disableMetricsCollection": false
 								},
 								"enableStaging": false,
 								"translator": {
@@ -146,15 +151,15 @@
 									"type": "DatasetReference",
 									"parameters": {
 										"param_schema": {
-											"value": "@item().src_schema",
+											"value": "@{item().src_schema}",
 											"type": "Expression"
 										},
 										"param_table": {
-											"value": "@item().src_table",
+											"value": "@{item().src_table}",
 											"type": "Expression"
 										},
 										"param_db": {
-											"value": "@item().src_db",
+											"value": "@{item().src_db}",
 											"type": "Expression"
 										},
 										"param_dbsvr": {
@@ -170,15 +175,15 @@
 									"type": "DatasetReference",
 									"parameters": {
 										"param_schema": {
-											"value": "@item().tgt_schema",
+											"value": "@{item().tgt_schema}",
 											"type": "Expression"
 										},
 										"param_table": {
-											"value": "@item().tgt_table",
+											"value": "@{item().tgt_table}",
 											"type": "Expression"
 										},
 										"param_db": {
-											"value": "@item().tgt_db",
+											"value": "@{item().tgt_db}",
 											"type": "Expression"
 										},
 										"param_dbsvr": {
