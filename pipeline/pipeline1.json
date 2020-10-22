@@ -76,11 +76,92 @@
 						"referenceName": "AzureSqlDBTable",
 						"type": "DatasetReference",
 						"parameters": {
-							"param_schema": "dbo",
-							"param_table": "abc"
+							"param_schema": "ctrl",
+							"param_table": "config_db_to_db",
+							"param_db": {
+								"value": "@pipeline().parameters.dp_param_db",
+								"type": "Expression"
+							},
+							"param_dbsvr": {
+								"value": "@pipeline().parameters.dp_param_dbsvr",
+								"type": "Expression"
+							}
 						}
-					}
+					},
+					"firstRowOnly": false
 				}
+			},
+			{
+				"name": "ForEach1",
+				"type": "ForEach",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"items": {
+						"value": "@activity('Lookup Database Info').output.items()",
+						"type": "Expression"
+					},
+					"activities": [
+						{
+							"name": "Extract Azure SQL DB Data_copy1",
+							"type": "Copy",
+							"dependsOn": [],
+							"policy": {
+								"timeout": "7.00:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"source": {
+									"type": "AzureSqlSource",
+									"queryTimeout": "02:00:00",
+									"partitionOption": "None"
+								},
+								"sink": {
+									"type": "AzureSqlSink"
+								},
+								"enableStaging": false,
+								"translator": {
+									"type": "TabularTranslator",
+									"typeConversion": true,
+									"typeConversionSettings": {
+										"allowDataTruncation": true,
+										"treatBooleanAsNumber": false
+									}
+								}
+							},
+							"inputs": [
+								{
+									"referenceName": "AzureSqlDBTable",
+									"type": "DatasetReference",
+									"parameters": {
+										"param_schema": "dbo",
+										"param_table": "abc"
+									}
+								}
+							],
+							"outputs": [
+								{
+									"referenceName": "AzureSqlDBTable",
+									"type": "DatasetReference",
+									"parameters": {
+										"param_schema": "dbo",
+										"param_table": "abc"
+									}
+								}
+							]
+						}
+					]
+				}
+			},
+			{
+				"name": "Set variable1",
+				"type": "SetVariable",
+				"dependsOn": [],
+				"userProperties": []
 			}
 		],
 		"parameters": {
