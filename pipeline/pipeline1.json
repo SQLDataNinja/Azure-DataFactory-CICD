@@ -94,11 +94,18 @@
 			{
 				"name": "ForEach1",
 				"type": "ForEach",
-				"dependsOn": [],
+				"dependsOn": [
+					{
+						"activity": "Set Db List Variable",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
 				"userProperties": [],
 				"typeProperties": {
 					"items": {
-						"value": "@activity('Lookup Database Info').output.items()",
+						"value": "@variables('var_db_list')",
 						"type": "Expression"
 					},
 					"activities": [
@@ -138,8 +145,22 @@
 									"referenceName": "AzureSqlDBTable",
 									"type": "DatasetReference",
 									"parameters": {
-										"param_schema": "dbo",
-										"param_table": "abc"
+										"param_schema": {
+											"value": "@item().src_schema",
+											"type": "Expression"
+										},
+										"param_table": {
+											"value": "@item().src_table",
+											"type": "Expression"
+										},
+										"param_db": {
+											"value": "@item().src_db",
+											"type": "Expression"
+										},
+										"param_dbsvr": {
+											"value": "@pipeline().parameters.dp_param_dbsvr",
+											"type": "Expression"
+										}
 									}
 								}
 							],
@@ -148,8 +169,22 @@
 									"referenceName": "AzureSqlDBTable",
 									"type": "DatasetReference",
 									"parameters": {
-										"param_schema": "dbo",
-										"param_table": "abc"
+										"param_schema": {
+											"value": "@item().tgt_schema",
+											"type": "Expression"
+										},
+										"param_table": {
+											"value": "@item().tgt_table",
+											"type": "Expression"
+										},
+										"param_db": {
+											"value": "@item().tgt_db",
+											"type": "Expression"
+										},
+										"param_dbsvr": {
+											"value": "@pipeline().parameters.dp_param_dbsvr",
+											"type": "Expression"
+										}
 									}
 								}
 							]
@@ -158,10 +193,24 @@
 				}
 			},
 			{
-				"name": "Set variable1",
+				"name": "Set Db List Variable",
 				"type": "SetVariable",
-				"dependsOn": [],
-				"userProperties": []
+				"dependsOn": [
+					{
+						"activity": "Lookup Database Info",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "var_db_list",
+					"value": {
+						"value": "@activity('Lookup Database Info').output",
+						"type": "Expression"
+					}
+				}
 			}
 		],
 		"parameters": {
@@ -172,6 +221,11 @@
 			"dp_param_db": {
 				"type": "string",
 				"defaultValue": "test_db"
+			}
+		},
+		"variables": {
+			"var_db_list": {
+				"type": "Array"
 			}
 		},
 		"folder": {
