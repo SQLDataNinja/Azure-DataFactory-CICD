@@ -1,5 +1,5 @@
 {
-	"name": "pipeline1",
+	"name": "Capture_Source Data",
 	"properties": {
 		"activities": [
 			{
@@ -40,7 +40,7 @@
 				}
 			},
 			{
-				"name": "ForEach1",
+				"name": "ForEach Table in Schema Copy",
 				"type": "ForEach",
 				"dependsOn": [
 					{
@@ -58,7 +58,7 @@
 					},
 					"activities": [
 						{
-							"name": "Extract Azure SQL DB Data_copy1",
+							"name": "Extract Current Table Data",
 							"type": "Copy",
 							"dependsOn": [],
 							"policy": {
