@@ -96,7 +96,7 @@
 				"type": "ForEach",
 				"dependsOn": [
 					{
-						"activity": "Set Db List Variable",
+						"activity": "Lookup Database Info",
 						"dependencyConditions": [
 							"Succeeded"
 						]
@@ -105,7 +105,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"items": {
-						"value": "@variables('var_db_list')",
+						"value": "@activity('Lookup Database Info').output.value",
 						"type": "Expression"
 					},
 					"activities": [
@@ -195,26 +195,6 @@
 							]
 						}
 					]
-				}
-			},
-			{
-				"name": "Set Db List Variable",
-				"type": "SetVariable",
-				"dependsOn": [
-					{
-						"activity": "Lookup Database Info",
-						"dependencyConditions": [
-							"Succeeded"
-						]
-					}
-				],
-				"userProperties": [],
-				"typeProperties": {
-					"variableName": "var_db_list",
-					"value": {
-						"value": "@activity('Lookup Database Info').output",
-						"type": "Expression"
-					}
 				}
 			}
 		],
