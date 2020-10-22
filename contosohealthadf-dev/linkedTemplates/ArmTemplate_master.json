@@ -15,6 +15,14 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'AzureSqlDatabase_App'"
 		},
+		"AzureSqlDatabase_Metadata_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'AzureSqlDatabase_Metadata'"
+		},
+		"AzureSqlDatabase_Generic_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'AzureSqlDatabase_Generic'"
+		},
 		"AzureDataLakeStorage_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "https://contosodemoadls.dfs.core.windows.net"
@@ -51,6 +59,12 @@
 					},
 					"AzureSqlDatabase_App_connectionString": {
 						"value": "[parameters('AzureSqlDatabase_App_connectionString')]"
+					},
+					"AzureSqlDatabase_Metadata_connectionString": {
+						"value": "[parameters('AzureSqlDatabase_Metadata_connectionString')]"
+					},
+					"AzureSqlDatabase_Generic_connectionString": {
+						"value": "[parameters('AzureSqlDatabase_Generic_connectionString')]"
 					},
 					"AzureDataLakeStorage_properties_typeProperties_url": {
 						"value": "[parameters('AzureDataLakeStorage_properties_typeProperties_url')]"

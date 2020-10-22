@@ -11,6 +11,12 @@
 		"AzureSqlDatabase_App_connectionString": {
 			"value": ""
 		},
+		"AzureSqlDatabase_Metadata_connectionString": {
+			"value": ""
+		},
+		"AzureSqlDatabase_Generic_connectionString": {
+			"value": ""
+		},
 		"AzureDataLakeStorage_properties_typeProperties_url": {
 			"value": "https://contosodemoadls.dfs.core.windows.net"
 		},
