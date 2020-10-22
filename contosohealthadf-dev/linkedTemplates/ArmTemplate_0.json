@@ -328,7 +328,7 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/pipeline1')]",
+			"name": "[concat(parameters('factoryName'), '/Capture_Source Data')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
 			"properties": {
@@ -371,7 +371,7 @@
 						}
 					},
 					{
-						"name": "ForEach1",
+						"name": "ForEach Table in Schema Copy",
 						"type": "ForEach",
 						"dependsOn": [
 							{
@@ -389,7 +389,7 @@
 							},
 							"activities": [
 								{
-									"name": "Extract Azure SQL DB Data_copy1",
+									"name": "Extract Current Table Data",
 									"type": "Copy",
 									"dependsOn": [],
 									"policy": {

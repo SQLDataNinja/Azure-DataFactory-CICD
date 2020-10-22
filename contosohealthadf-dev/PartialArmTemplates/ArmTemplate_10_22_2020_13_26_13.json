@@ -1,0 +1,188 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"type": "string",
+			"metadata": "Data Factory name",
+			"defaultValue": "contosohealthadf-dev"
+		}
+	},
+	"variables": {
+		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+	},
+	"resources": [
+		{
+			"name": "[concat(parameters('factoryName'), '/Capture_Source Data')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Lookup Database Info",
+						"type": "Lookup",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "7.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"source": {
+								"type": "AzureSqlSource",
+								"queryTimeout": "02:00:00",
+								"partitionOption": "None"
+							},
+							"dataset": {
+								"referenceName": "AzureSqlDBTable",
+								"type": "DatasetReference",
+								"parameters": {
+									"param_schema": "ctrl",
+									"param_table": "config_db_to_db",
+									"param_db": {
+										"value": "@pipeline().parameters.dp_param_db",
+										"type": "Expression"
+									},
+									"param_dbsvr": {
+										"value": "@pipeline().parameters.dp_param_dbsvr",
+										"type": "Expression"
+									}
+								}
+							},
+							"firstRowOnly": false
+						}
+					},
+					{
+						"name": "ForEach Table in Schema Copy",
+						"type": "ForEach",
+						"dependsOn": [
+							{
+								"activity": "Lookup Database Info",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"items": {
+								"value": "@activity('Lookup Database Info').output.value",
+								"type": "Expression"
+							},
+							"activities": [
+								{
+									"name": "Extract Current Table Data",
+									"type": "Copy",
+									"dependsOn": [],
+									"policy": {
+										"timeout": "7.00:00:00",
+										"retry": 0,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"source": {
+											"type": "AzureSqlSource",
+											"queryTimeout": "02:00:00",
+											"partitionOption": "None"
+										},
+										"sink": {
+											"type": "AzureSqlSink",
+											"preCopyScript": {
+												"value": "TRUNCATE TABLE @{item().tgt_schema}.@{item().tgt_table};",
+												"type": "Expression"
+											},
+											"disableMetricsCollection": false
+										},
+										"enableStaging": false,
+										"translator": {
+											"type": "TabularTranslator",
+											"typeConversion": true,
+											"typeConversionSettings": {
+												"allowDataTruncation": true,
+												"treatBooleanAsNumber": false
+											}
+										}
+									},
+									"inputs": [
+										{
+											"referenceName": "AzureSqlDBTable",
+											"type": "DatasetReference",
+											"parameters": {
+												"param_schema": {
+													"value": "@{item().src_schema}",
+													"type": "Expression"
+												},
+												"param_table": {
+													"value": "@{item().src_table}",
+													"type": "Expression"
+												},
+												"param_db": {
+													"value": "@{item().src_db}",
+													"type": "Expression"
+												},
+												"param_dbsvr": {
+													"value": "@pipeline().parameters.dp_param_dbsvr",
+													"type": "Expression"
+												}
+											}
+										}
+									],
+									"outputs": [
+										{
+											"referenceName": "AzureSqlDBTable",
+											"type": "DatasetReference",
+											"parameters": {
+												"param_schema": {
+													"value": "@{item().tgt_schema}",
+													"type": "Expression"
+												},
+												"param_table": {
+													"value": "@{item().tgt_table}",
+													"type": "Expression"
+												},
+												"param_db": {
+													"value": "@{item().tgt_db}",
+													"type": "Expression"
+												},
+												"param_dbsvr": {
+													"value": "@pipeline().parameters.dp_param_dbsvr",
+													"type": "Expression"
+												}
+											}
+										}
+									]
+								}
+							]
+						}
+					}
+				],
+				"parameters": {
+					"dp_param_dbsvr": {
+						"type": "string",
+						"defaultValue": "test_svr"
+					},
+					"dp_param_db": {
+						"type": "string",
+						"defaultValue": "test_db"
+					}
+				},
+				"variables": {
+					"var_db_list": {
+						"type": "Array"
+					}
+				},
+				"folder": {
+					"name": "Dynamic Pipelines"
+				},
+				"annotations": []
+			},
+			"dependsOn": []
+		}
+	]
+}
